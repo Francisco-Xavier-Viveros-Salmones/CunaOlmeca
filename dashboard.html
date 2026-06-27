@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard CRUD | San Lorenzo Tenochtitlán</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            gap: 30px;
+        }
+        
+        .crud-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media(min-width: 900px) {
+            .crud-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .crud-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .crud-card h3 {
+            color: var(--clay-red);
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(0,0,0,0.05);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--basalt-dark);
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        .success-msg {
+            color: #2e7d32;
+            background: #e8f5e9;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 15px;
+            display: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Listas CRUD */
+        .admin-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--jungle-green);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .admin-list-item h4 {
+            margin: 0 0 5px 0;
+            font-size: 1rem;
+            color: var(--basalt-dark);
+        }
+        .admin-list-item p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+        .btn-delete {
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn-delete:hover {
+            background-color: #b71c1c;
+        }
+
+        .admin-only {
+            display: none;
+        }
+    </style>
+</head>
+<body style="background: linear-gradient(rgba(28, 40, 51, 0.8), rgba(28, 40, 51, 0.9)), url('hero.png') center/cover fixed;">
+
+    <!-- Top Bar y Menú -->
+    <div class="top-bar">
+        <div class="contact-info">
+            <span id="userNameDisplay" style="font-weight: bold;">Cargando...</span>
+        </div>
+        <div class="top-bar-links">
+            <div class="dropdown-container">
+                <button onclick="window.globalSignOut()" style="background: none; border: none; color: white; margin-right: 20px; font-weight: 500; cursor: pointer; font-family: inherit; font-size: 1em;"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+            </div>
+            <div class="dropdown-container" style="margin-left: 15px; border-left: 1px solid rgba(255,255,255,0.3); padding-left: 15px;">
+                <a href="index.html" class="btn-primary" style="padding: 6px 15px; font-size: 0.9em; background: rgba(255,255,255,0.2);"><i class="fas fa-eye"></i> Ir al Portal Público 👁️</a>
+            </div>
+        </div>
+    </div>
+    
+    <header style="background: rgba(255, 255, 255, 0.95);">
+        <nav>
+            <a href="dashboard.html" class="brand">Ajustes del Sistema</a>
+        </nav>
+    </header>
+
+    <div class="dashboard-container">
+        <h1 style="color: white; text-align: center; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Gestión de Usuarios</h1>
+        <p id="gestorWelcome" style="color: white; text-align: center; display: none;">Eres un Gestor. No tienes permisos para crear nuevos usuarios. Dirígete al portal público para editar avisos y fotos.</p>
+
+        <!-- SECCIÓN: GESTORES (ADMIN ONLY) -->
+        <div class="crud-card" id="adminPanel" style="max-width: 600px; margin: 0 auto; width: 100%; display: none;">
+            <h3>👥 Gestionar Nuevos Usuarios (Solo Admin)</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 15px; opacity: 0.8;">Crea cuentas para que otros publiquen contenido.</p>
+            <form id="formGestor">
+                <div class="form-group">
+                    <label>Correo Electrónico (Para Iniciar Sesión)</label>
+                    <input type="email" id="gestorUser" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña (Mínimo 6 caracteres)</label>
+                    <input type="password" id="gestorPass" required minlength="6">
+                </div>
+                <button type="submit" class="btn-secondary" style="width: 100%;">Registrar Nuevo Usuario</button>
+                <div id="gestorSuccess" class="success-msg">✅ Usuario creado exitosamente.</div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase Script -->
+    <script src="app.js"></script>
+    <script type="module" src="firebase-app.js"></script>
+</body>
+</html>

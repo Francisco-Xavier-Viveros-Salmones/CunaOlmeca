@@ -1,0 +1,2 @@
+# Ignorar la configuración real de Firebase para no exponer las llaves en GitHub
+firebase-config.js

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avisos Comunitarios | San Lorenzo Tenochtitlán</title>
+    <link rel="stylesheet" href="style.css?v=4">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="contact-info">
+            <button onclick="window.globalSignOut()" id="globalLogoutBtn" style="display: none; background: rgba(0,0,0,0.3); border: none; color: white; padding: 4px 10px; border-radius: 4px; margin-right: 15px; cursor: pointer; font-size: 0.9em; transition: 0.3s;"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+            <span style="font-weight: 600; letter-spacing: 0.5px;">🏛️ Cuna de la Civilización Olmeca</span>
+        </div>
+        <div class="top-bar-links">
+            <div class="dropdown-container">
+                <button>Accesibilidad 👁️</button>
+                <div class="dropdown-menu">
+                    <button onclick="toggleContrast()">Alto Contraste</button>
+                    <button onclick="toggleTextSize()">Texto Grande</button>
+                </div>
+            </div>
+            <div class="dropdown-container">
+                <button>Lenguas 🌐</button>
+                <div class="dropdown-menu">
+                    <button onclick="changeLanguage('es')">Español</button>
+                    <button onclick="changeLanguage('en')">English</button>
+                    <button onclick="changeLanguage('nhe')">Náhuatl</button>
+                    <button onclick="changeLanguage('zap')">Zapoteco</button>
+                </div>
+            </div>
+            <div class="dropdown-container" style="margin-left: 15px; border-left: 1px solid rgba(255,255,255,0.3); padding-left: 15px;">
+                <a href="login.html" id="authBtn" style="color: white; text-decoration: none; font-size: 0.85rem; font-weight: bold; opacity: 0.9;">Iniciar Sesión 🔒</a>
+            </div>
+        </div>
+    </div>
+    <header>
+        <nav>
+            <a href="index.html" class="brand">San Lorenzo</a>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="historia.html">Historia</a></li>
+                <li><a href="visita.html">Visita</a></li>
+                <li><a href="avisos.html">Avisos</a></li>
+                <li><a href="galeria.html" style="display:none;"></a><a href="index.html#galeria">Galería</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <header class="page-header">
+            <h1>Tablero de Avisos</h1>
+            <p>Espacio informativo para los habitantes de San Lorenzo Tenochtitlán y ejidos vecinos.</p>
+        </header>
+
+        <section id="avisos">
+            <!-- Formulario Inline (Oculto por defecto) -->
+            <div id="inlineAvisoFormContainer" style="display: none; max-width: 600px; margin: 0 auto 30px auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 4px solid var(--clay-red);">
+                <h3 style="margin-top: 0; color: var(--clay-red);">📢 Publicar Nuevo Aviso</h3>
+                <form id="formAviso" onsubmit="window.submitFormAviso(event)">
+                    <input type="text" id="avisoTitle" placeholder="Título (Ej: Asamblea Ejidal)" required style="width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+                    <textarea id="avisoContent" rows="3" placeholder="Contenido del aviso..." required style="width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit;"></textarea>
+                    
+                    <label style="display: block; font-size: 0.9em; margin-bottom: 5px; color: #555;">Foto Adjunta (Opcional):</label>
+                    <input type="file" id="avisoFile" accept="image/*" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+                    
+                    <label style="display: block; font-size: 0.9em; margin-bottom: 5px; color: #555;">Fecha de Vencimiento Automático (Opcional):</label>
+                    <input type="date" id="avisoExpiration" style="width: 100%; margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+                    
+                    <button type="submit" class="btn-primary" style="width: 100%;">Publicar Aviso Ahora</button>
+                    <div id="avisoSuccess" style="display: none; color: green; font-weight: bold; margin-top: 10px; text-align: center;">✅ Publicado. Recargando...</div>
+                </form>
+            </div>
+
+            <div class="grid-2">
+                <!-- Los avisos se cargarán dinámicamente desde Firebase aquí -->
+                <p style="grid-column: 1 / -1; text-align: center; color: #666;">Cargando avisos...</p>
+            </div>
+
+            <div class="back-link">
+                <a href="index.html" class="btn-secondary">⬅ Volver al Inicio</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <a href="index.html" class="brand" style="font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; background: linear-gradient(90deg, var(--clay-red), var(--jungle-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; text-decoration: none; display: inline-block; margin-bottom: 15px;">San Lorenzo</a>
+                <p>Sitio dedicado a preservar y difundir la riqueza cultural de San Lorenzo Tenochtitlán.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="historia.html">Historia</a></li>
+                    <li><a href="visita.html">Visita</a></li>
+                    <li><a href="avisos.html">Avisos</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Servicios</h4>
+                <ul>
+                    <li><a href="galeria.html">Galería</a></li>
+                    <li><a href="login.html">Acceso Administrador</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Creador de la página</h4>
+                <ul>
+                    <li>👤 Francisco Xavier Viveros Salmones</li>
+                    <li>📞 <a href="tel:2281140892">228 114 0892</a></li>
+                    <li>✉️ <a href="mailto:franciscoxaviersal@gmail.com">franciscoxaviersal@gmail.com</a></li>
+                    <li>💻 <a href="https://github.com/Francisco-Xavier-Viveros-Salmones" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Proyecto San Lorenzo Tenochtitlán. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    <div id="google_translate_element" style="visibility:hidden; height:0; overflow:hidden; position:absolute;"></div>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="app.js?v=4"></script>
+    <script type="module" src="firebase-app.js?v=6"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería Fotográfica | San Lorenzo Tenochtitlán</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="contact-info">
+            <span style="font-weight: 600; letter-spacing: 0.5px;">🏛️ Cuna de la Civilización Olmeca</span>
+        </div>
+        <div class="top-bar-links">
+            <div class="dropdown-container">
+                <button>Accesibilidad 👁️</button>
+                <div class="dropdown-menu">
+                    <button onclick="toggleContrast()">Alto Contraste</button>
+                    <button onclick="toggleTextSize()">Texto Grande</button>
+                </div>
+            </div>
+            <div class="dropdown-container">
+                <button>Lenguas 🌐</button>
+                <div class="dropdown-menu">
+                    <button onclick="changeLanguage('es')">Español</button>
+                    <button onclick="changeLanguage('en')">English</button>
+                    <button onclick="changeLanguage('nhe')">Náhuatl</button>
+                    <button onclick="changeLanguage('zap')">Zapoteco</button>
+                </div>
+            </div>
+            <div class="dropdown-container" style="margin-left: 15px; border-left: 1px solid rgba(255,255,255,0.3); padding-left: 15px;">
+                <a href="login.html" id="authBtn" style="color: white; text-decoration: none; font-size: 0.85rem; font-weight: bold; opacity: 0.9;">Iniciar Sesión 🔒</a>
+            </div>
+        </div>
+    </div>
+    <header>
+        <nav>
+            <a href="index.html" class="brand">San Lorenzo</a>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="historia.html">Historia</a></li>
+                <li><a href="visita.html">Visita</a></li>
+                <li><a href="avisos.html">Avisos</a></li>
+                <li><a href="galeria.html">Galería</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <header class="page-header">
+            <h1>Galería Fotográfica</h1>
+            <p>Un recorrido visual por el esplendor de la cultura Olmeca y nuestra comunidad.</p>
+        </header>
+
+        <section id="galeria">
+            <div id="gallery-grid" class="gallery-grid">
+                <!-- Las fotos se cargarán aquí dinámicamente desde app.js -->
+            </div>
+
+            <div class="back-link" style="margin-top: 50px;">
+                <a href="index.html" class="btn-secondary">⬅ Volver al Inicio</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <a href="index.html" class="brand" style="font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; background: linear-gradient(90deg, var(--clay-red), var(--jungle-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; text-decoration: none; display: inline-block; margin-bottom: 15px;">San Lorenzo</a>
+                <p>Sitio dedicado a preservar y difundir la riqueza cultural de San Lorenzo Tenochtitlán.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="historia.html">Historia</a></li>
+                    <li><a href="visita.html">Visita</a></li>
+                    <li><a href="avisos.html">Avisos</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Servicios</h4>
+                <ul>
+                    <li><a href="galeria.html">Galería</a></li>
+                    <li><a href="login.html">Acceso Administrador</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Creador de la página</h4>
+                <ul>
+                    <li>👤 Francisco Xavier Viveros Salmones</li>
+                    <li>📞 <a href="tel:2281140892">228 114 0892</a></li>
+                    <li>✉️ <a href="mailto:franciscoxaviersal@gmail.com">franciscoxaviersal@gmail.com</a></li>
+                    <li>💻 <a href="https://github.com/Francisco-Xavier-Viveros-Salmones" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Proyecto San Lorenzo Tenochtitlán. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    <div id="google_translate_element" style="display:none;"></div>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="app.js"></script>
+    <script type="module" src="firebase-app.js"></script>
+</body>
+</html>

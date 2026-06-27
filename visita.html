@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planea tu Visita | San Lorenzo Tenochtitlán</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="contact-info">
+            <span style="font-weight: 600; letter-spacing: 0.5px;">🏛️ Cuna de la Civilización Olmeca</span>
+        </div>
+        <div class="top-bar-links">
+            <div class="dropdown-container">
+                <button>Accesibilidad 👁️</button>
+                <div class="dropdown-menu">
+                    <button onclick="toggleContrast()">Alto Contraste</button>
+                    <button onclick="toggleTextSize()">Texto Grande</button>
+                </div>
+            </div>
+            <div class="dropdown-container">
+                <button>Lenguas 🌐</button>
+                <div class="dropdown-menu">
+                    <button onclick="changeLanguage('es')">Español</button>
+                    <button onclick="changeLanguage('en')">English</button>
+                    <button onclick="changeLanguage('nhe')">Náhuatl</button>
+                    <button onclick="changeLanguage('zap')">Zapoteco</button>
+                </div>
+            </div>
+            <div class="dropdown-container" style="margin-left: 15px; border-left: 1px solid rgba(255,255,255,0.3); padding-left: 15px;">
+                <a href="login.html" id="authBtn" style="color: white; text-decoration: none; font-size: 0.85rem; font-weight: bold; opacity: 0.9;">Iniciar Sesión 🔒</a>
+            </div>
+        </div>
+    </div>
+    <header>
+        <nav>
+            <a href="index.html" class="brand">San Lorenzo</a>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="historia.html">Historia</a></li>
+                <li><a href="visita.html">Visita</a></li>
+                <li><a href="avisos.html">Avisos</a></li>
+                <li><a href="galeria.html" style="display:none;"></a><a href="index.html#galeria">Galería</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <header class="page-header">
+            <h1>Planea tu Visita</h1>
+            <p>Prepara tu viaje a la cuna de la civilización Olmeca. Te dejamos toda la información logística necesaria.</p>
+        </header>
+
+        <section id="visita">
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Información General</h3>
+                    <p><strong>Ubicación:</strong> Cuauhtémoc s/n, CP 93780 San Lorenzo Tenochtitlan, Texistepec, Veracruz.</p>
+                    <p><strong>Horario del Museo y Zona:</strong> Martes a domingo de 09:00 a 17:00 hrs.</p>
+                    <p><strong>Costo de acceso:</strong> $75 MXN (Entrada general). Domingos entrada libre para nacionales y residentes.</p>
+                </div>
+                <div class="card">
+                    <h3>Cómo Llegar</h3>
+                    <p>Si viajas en auto desde Acayucan o Minatitlán, toma la Carretera Federal 180. En la desviación a Texistepec, continúa por la carretera principal cruzando el centro del municipio, para adentrarte aproximadamente 20 km al sur por el camino asfaltado hasta llegar al museo.</p>
+                    <iframe src="https://maps.google.com/maps?q=Museo+de+Sitio+San+Lorenzo+Tenochtitlan,+Texistepec,+Veracruz&t=&z=14&ie=UTF8&iwloc=&output=embed" width="100%" height="250" style="border:0; border-radius: 8px; margin-top: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                <div class="card">
+                    <h3>¿Qué llevar? (Recomendaciones)</h3>
+                    <p>Al estar en un clima tropical lluvioso y caluroso, te sugerimos vestir:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Ropa de algodón ligera y de colores claros.</li>
+                        <li>Zapato cerrado cómodo para terracería.</li>
+                        <li>Sombrero o gorra, y bloqueador solar biodegradable.</li>
+                        <li>Repelente de mosquitos (indispensable) y agua purificada.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Servicios en la Comunidad</h3>
+                    <p>En el poblado de San Lorenzo podrás encontrar pequeñas fondas de comida tradicional veracruzana, tiendas de abarrotes para comprar hidratación, y baños públicos en el área del museo de sitio. ¡Apoya la economía local consumiendo en el pueblo!</p>
+                </div>
+            </div>
+
+            <div class="back-link">
+                <a href="index.html" class="btn-secondary">⬅ Volver al Inicio</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <a href="index.html" class="brand" style="font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; background: linear-gradient(90deg, var(--clay-red), var(--jungle-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; text-decoration: none; display: inline-block; margin-bottom: 15px;">San Lorenzo</a>
+                <p>Sitio dedicado a preservar y difundir la riqueza cultural de San Lorenzo Tenochtitlán.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="historia.html">Historia</a></li>
+                    <li><a href="visita.html">Visita</a></li>
+                    <li><a href="avisos.html">Avisos</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Servicios</h4>
+                <ul>
+                    <li><a href="galeria.html">Galería</a></li>
+                    <li><a href="login.html">Acceso Administrador</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Creador de la página</h4>
+                <ul>
+                    <li>👤 Francisco Xavier Viveros Salmones</li>
+                    <li>📞 <a href="tel:2281140892">228 114 0892</a></li>
+                    <li>✉️ <a href="mailto:franciscoxaviersal@gmail.com">franciscoxaviersal@gmail.com</a></li>
+                    <li>💻 <a href="https://github.com/Francisco-Xavier-Viveros-Salmones" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Proyecto San Lorenzo Tenochtitlán. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    <div id="google_translate_element" style="display:none;"></div>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="app.js"></script>
+    <script type="module" src="firebase-app.js"></script>
+</body>
+</html>
