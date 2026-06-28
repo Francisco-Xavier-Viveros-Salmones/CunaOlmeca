@@ -82,6 +82,27 @@
             <!-- Fotos Dinámicas de Firebase -->
         </div>
     </section>
+
+        <!-- Nueva sección de Videoteca -->
+        <section id="videoteca" style="padding: 40px 20px; max-width: 1200px; margin: 0 auto;">
+        <h2 style="text-align: center; color: var(--clay-red); margin-bottom: 30px;">Videoteca</h2>
+        
+        <!-- Formulario Inline Videoteca (Oculto por defecto) -->
+        <div id="inlineVideoFormContainer" style="display: none; max-width: 600px; margin: 0 auto 30px auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 4px solid var(--jungle-green);">
+            <h3 style="margin-top: 0; color: var(--jungle-green);">🎥 Subir Nuevo Video</h3>
+            <form id="formVideo" onsubmit="window.submitFormVideo(event)">
+                <input type="text" id="videoTitle" placeholder="Título del video" required style="width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+                <textarea id="videoDesc" rows="2" placeholder="Descripción opcional" style="width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit;"></textarea>
+                <input type="file" id="videoFile" accept="video/*" style="width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+                <button type="submit" class="btn-primary" style="width: 100%; background: var(--jungle-green);">Subir Video Ahora</button>
+                <div id="videoSuccess" style="display: none; color: green; font-weight: bold; margin-top: 10px; text-align: center;">✅ Video subido. Recargando...</div>
+            </form>
+        </div>
+
+        <div class="gallery-grid" id="video-grid">
+            <!-- Videos Dinámicos de Firebase -->
+        </div>
+    </section>
     </main>
 
     <footer class="main-footer">

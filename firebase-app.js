@@ -31,6 +31,9 @@ onAuthStateChanged(auth, async (user) => {
         const formFotoInline = document.getElementById('inlineFotoFormContainer');
         if (formFotoInline) formFotoInline.style.display = 'block';
 
+        const formVideoInline = document.getElementById('inlineVideoFormContainer');
+        if (formVideoInline) formVideoInline.style.display = 'block';
+
     } else {
         userRole = null;
         if (authBtn) {
@@ -60,6 +63,7 @@ onAuthStateChanged(auth, async (user) => {
     // Una vez resuelto el estado de sesión, cargamos los datos para saber si dibujar botones de borrado
     await cargarAvisos();
     await cargarGaleria();
+    await cargarVideos();
 });
 
 // Botón de cerrar sesión global (necesita estar disponible en window)
@@ -257,6 +261,76 @@ window.submitFormFoto = async (e) => {
     }
 };
 
+// D. SUBIR VIDEO O ACTUALIZAR
+window.editingVideoId = null;
+window.editingVideoOldUrl = null;
+
+window.submitFormVideo = async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    const originalText = btn.innerText;
+    
+    const title = document.getElementById('videoTitle').value;
+    const desc = document.getElementById('videoDesc').value;
+    const fileInput = document.getElementById('videoFile');
+    const file = fileInput.files[0];
+    
+    if (!file && !window.editingVideoId) {
+        alert("Por favor selecciona un video.");
+        return;
+    }
+
+    btn.innerText = window.editingVideoId ? "Actualizando video..." : "Subiendo archivo...";
+    btn.disabled = true;
+
+    try {
+        let finalUrl = null;
+
+        if (file) {
+            // 1. Subir a Storage
+            const storageRef = ref(storage, 'videos/' + Date.now() + '_' + file.name);
+            await uploadBytes(storageRef, file);
+            
+            // 2. Obtener la URL pública real
+            finalUrl = await getDownloadURL(storageRef);
+        } else if (window.editingVideoId) {
+            finalUrl = window.editingVideoOldUrl; // keep old if not replacing
+        }
+        
+        // 3. Guardar en Firestore
+        if (window.editingVideoId) {
+            await updateDoc(doc(db, "videos", window.editingVideoId), {
+                title: title,
+                description: desc,
+                url: finalUrl
+            });
+        } else {
+            await addDoc(collection(db, "videos"), {
+                title: title,
+                description: desc,
+                url: finalUrl,
+                createdAt: new Date()
+            });
+        }
+        
+        document.getElementById('videoSuccess').innerText = window.editingVideoId ? '✅ Actualizado. Recargando...' : '✅ Video subido. Recargando...';
+        document.getElementById('videoSuccess').style.display = 'block';
+        document.getElementById('formVideo').reset();
+        window.editingVideoId = null;
+        window.editingVideoOldUrl = null;
+        
+        setTimeout(() => {
+            document.getElementById('videoSuccess').style.display = 'none';
+            window.location.reload(); 
+        }, 1500);
+    } catch (error) {
+        console.error("Error procesando video:", error);
+        alert("Hubo un error al procesar el video.");
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+};
+
 // ==========================================
 // 4. LECTURA DE DATOS PÚBLICOS E INLINE CMS
 // ==========================================
@@ -385,6 +459,46 @@ async function cargarGaleria() {
         }
     } catch (error) {
         console.error("Error cargando fotos de Firebase:", error);
+    }
+}
+
+async function cargarVideos() {
+    const gridVideo = document.getElementById('video-grid');
+    if (!gridVideo) return;
+
+    try {
+        const q = query(collection(db, "videos"), orderBy("createdAt", "desc"));
+        const querySnapshot = await getDocs(q);
+        
+        let dynamicHTML = '';
+        querySnapshot.forEach((docSnap) => {
+            const video = docSnap.data();
+            
+            const safeDescForArg = video.description ? video.description.replace(/'/g, "\\'").replace(/\n/g, '\\n') : '';
+            
+            let actionBtnsHTML = '';
+            if (userRole === 'admin' || userRole === 'gestor') {
+                const editBtn = `<button onclick="window.editarVideo(event, '${docSnap.id}', '${video.title.replace(/'/g, "\\'")}', '${safeDescForArg}', '${video.url}')" style="background: #1976D2; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; z-index: 10; margin-right: 5px;">✏️ Editar</button>`;
+                const deleteBtn = `<button onclick="window.borrarVideo('${docSnap.id}', '${video.url}')" style="background: rgba(211, 47, 47, 0.9); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; z-index: 10;">🗑️ Borrar</button>`;
+                actionBtnsHTML = `<div style="position: absolute; top: 10px; right: 10px; display: flex; z-index: 20;">${editBtn}${deleteBtn}</div>`;
+            }
+
+            dynamicHTML += `
+            <div class="gallery-card" id="video-${docSnap.id}" style="position: relative;">
+                ${actionBtnsHTML}
+                <video src="${video.url}" controls class="gallery-video" style="border-top-left-radius: 12px; border-top-right-radius: 12px;"></video>
+                <div class="gallery-caption">${video.title}</div>
+            </div>
+            `;
+        });
+        
+        if (dynamicHTML) {
+            gridVideo.innerHTML = dynamicHTML;
+        } else {
+            gridVideo.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No hay videos en la videoteca. ¡Sube el primero!</p>';
+        }
+    } catch (error) {
+        console.error("Error cargando videos de Firebase:", error);
     }
 }
 
@@ -536,7 +650,77 @@ window.editarFoto = (event, id, title, desc, imageUrl) => {
     }
     cancelBtn.style.display = 'block';
     
-    window.scrollTo({ top: document.getElementById('inlineFotoFormContainer').offsetTop - 20, behavior: 'smooth' });
+    document.getElementById('formFoto').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.borrarVideo = async (id, url) => {
+    try {
+        if (url && url.includes('firebasestorage')) {
+            try {
+                const pathRegex = /o\/(.+?)\?/;
+                const match = url.match(pathRegex);
+                if (match && match[1]) {
+                    const decodedPath = decodeURIComponent(match[1]);
+                    const fileRef = ref(storage, decodedPath);
+                    await deleteObject(fileRef);
+                }
+            } catch (videoError) {
+                console.error("Error borrando video de Storage (ignorando):", videoError);
+            }
+        }
+        
+        await deleteDoc(doc(db, "videos", id));
+        
+        const videoElement = document.getElementById(`video-${id}`);
+        if (videoElement) videoElement.remove();
+    } catch (error) {
+        console.error("Error al borrar video:", error);
+        alert("Hubo un error al borrar el video.");
+    }
+};
+
+window.editarVideo = (event, id, title, desc, videoUrl) => {
+    if (event) event.stopPropagation();
+    
+    document.getElementById('inlineVideoFormContainer').style.display = 'block';
+    document.getElementById('videoTitle').value = title;
+    document.getElementById('videoDesc').value = desc;
+    
+    window.editingVideoId = id;
+    window.editingVideoOldUrl = videoUrl;
+    
+    const submitBtn = document.querySelector('#formVideo button[type="submit"]');
+    submitBtn.innerText = "Guardar Cambios";
+    submitBtn.style.background = "#FF9800";
+    
+    let cancelBtn = document.getElementById('cancelEditVideoBtn');
+    if (!cancelBtn) {
+        cancelBtn = document.createElement('button');
+        cancelBtn.id = 'cancelEditVideoBtn';
+        cancelBtn.type = 'button';
+        cancelBtn.innerText = 'Cancelar Edición';
+        cancelBtn.style.background = '#666';
+        cancelBtn.style.color = 'white';
+        cancelBtn.style.border = 'none';
+        cancelBtn.style.padding = '10px';
+        cancelBtn.style.borderRadius = '6px';
+        cancelBtn.style.marginTop = '10px';
+        cancelBtn.style.width = '100%';
+        cancelBtn.style.cursor = 'pointer';
+        
+        cancelBtn.onclick = () => {
+            document.getElementById('formVideo').reset();
+            window.editingVideoId = null;
+            window.editingVideoOldUrl = null;
+            submitBtn.innerText = "Subir Video Ahora";
+            submitBtn.style.background = "var(--jungle-green)"; 
+            cancelBtn.style.display = 'none';
+        };
+        document.getElementById('formVideo').appendChild(cancelBtn);
+    }
+    cancelBtn.style.display = 'block';
+    
+    document.getElementById('formVideo').scrollIntoView({ behavior: 'smooth' });
 };
 
 // ==========================================
