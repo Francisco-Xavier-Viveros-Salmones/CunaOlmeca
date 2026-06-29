@@ -704,3 +704,177 @@ body {
   border: none !important;
   box-shadow: none !important;
 }
+
+/* =========================================
+   HISTORY PAGE REDESIGN
+   ========================================= */
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    margin: 40px auto 60px;
+}
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 16px;
+}
+
+.history-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+.history-block {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+.history-block.reverse {
+    flex-direction: row-reverse;
+}
+.history-block-content {
+    flex: 1;
+}
+.history-block-content h2 {
+    color: var(--clay-red);
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+}
+.history-block-content h2.green-heading {
+    color: var(--jungle-green);
+}
+.history-block-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 15px;
+    color: var(--text-dark);
+}
+.history-block-content ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-dark);
+}
+.history-block-content ul li {
+    margin-bottom: 10px;
+}
+.history-block-img {
+    flex: 1;
+    max-width: 45%;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.history-block-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+.history-block-img:hover img {
+    transform: scale(1.05);
+}
+
+@media (max-width: 992px) {
+    .history-block, .history-block.reverse {
+        flex-direction: column;
+        padding: 30px;
+    }
+    .history-block-img {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+/* Timeline */
+.timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 60px auto;
+}
+.timeline::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--clay-red), var(--jungle-green));
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -2px;
+    border-radius: 4px;
+}
+.timeline-item {
+    padding: 20px 40px;
+    position: relative;
+    width: 50%;
+}
+.timeline-item.left { left: 0; text-align: right; }
+.timeline-item.right { left: 50%; text-align: left; }
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    right: -12px;
+    background-color: white;
+    border: 4px solid var(--jungle-green);
+    top: 28px;
+    border-radius: 50%;
+    z-index: 1;
+    transition: transform 0.3s;
+}
+.timeline-item:hover::after {
+    transform: scale(1.3);
+    background-color: var(--clay-red);
+    border-color: white;
+}
+.timeline-item.right::after {
+    left: -12px;
+}
+.timeline-content {
+    padding: 25px 30px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    position: relative;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+}
+.timeline-item:hover .timeline-content {
+    transform: translateY(-5px);
+}
+.timeline-content h3 {
+    color: var(--clay-red);
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+}
+.timeline-content p {
+    font-size: 1.05rem;
+    color: var(--text-dark);
+}
+
+@media screen and (max-width: 768px) {
+  .timeline::after { left: 31px; }
+  .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; text-align: left; }
+  .timeline-item.right { left: 0%; }
+  .timeline-item.left::after, .timeline-item.right::after { left: 19px; }
+}
